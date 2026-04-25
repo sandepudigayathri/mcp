@@ -7,7 +7,7 @@ class MyMCP(BaseModel):
   tool_name : str
   arguments : dict
 
-tools = {"find_distance": find_distance, "get_fare":get_fare}
+#tools = {"find_distance": find_distance, "get_fare":get_fare}
 
 def find_distance(origin,distance):
   Base_Url = 'https://maps.googleapis.com/maps/api/distancematrix/json?'
@@ -23,7 +23,8 @@ def get_fare(num):
     num-=100
     fare+=(num*12)
     return fare
-  
+ 
+tools = {"find_distance": find_distance, "get_fare":get_fare} 
 
 @app.get("/tools")
 def list_tools():
