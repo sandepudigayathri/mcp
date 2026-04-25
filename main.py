@@ -9,9 +9,9 @@ class MyMCP(BaseModel):
 
 #tools = {"find_distance": find_distance, "get_fare":get_fare}
 
-def find_distance(origin,distance):
+def find_distance(origin,destination):
   Base_Url = 'https://maps.googleapis.com/maps/api/distancematrix/json?'
-  full_url = f'{Base_Url}origins={origin}&destinations={distance}&key=AIzaSyCpJwiBDbisM_YJCuPnEfBE78dMUWuqK_8'
+  full_url = f'{Base_Url}origins={origin}&destinations={destination}&key=AIzaSyCpJwiBDbisM_YJCuPnEfBE78dMUWuqK_8'
   response = requests.get(full_url).json()
   return response['rows'][0]['elements'][0]['distance']['text']
 
@@ -34,15 +34,15 @@ def list_tools():
               'name':'find_distance',
               'description': 'find the distance between two places in kms',
               'parameters': {
-                  'origin' : {type: 'string'},
-                  'destination': {type: 'string'}
+                  'origin' : {'type': 'string'},
+                  'destination': {'type': 'string'}
               }
               },
           {
               'name':'get_fare',
               'description': 'find fare to travel between two places based on kms',
               'parameters': {
-                  'num' : {type: 'integer'}              
+                  'num' : {'type': 'integer'}              
           }
           }
       ] 
@@ -54,7 +54,7 @@ def call_tool(req : MyMCP):
     return {'status': 'error', 'description':'tool not available'}
   else:
     try:
-      result = tools['req.tool_name'](**req.arguments)
+      result = tools[req.tool_name](**req.arguments)
       return {'status':'OK', 'description': result}
     except Exception as e:
       return {'status':'error', 'description': str(e)}
