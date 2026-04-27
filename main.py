@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
+import requests
 
 app =  FastAPI()
 
@@ -28,24 +29,41 @@ tools = {"find_distance": find_distance, "get_fare":get_fare}
 
 @app.get("/tools")
 def list_tools():
-  return{
-      'tools' :[
-          {
-              'name':'find_distance',
-              'description': 'find the distance between two places in kms',
-              'parameters': {
-                  'origin' : {'type': 'string'},
-                  'destination': {'type': 'string'}
-              }
-              },
-          {
-              'name':'get_fare',
-              'description': 'find fare to travel between two places based on kms',
-              'parameters': {
-                  'num' : {'type': 'integer'}              
-          }
-          }
-      ] 
+  return {
+    "tools": [
+      {
+        "name": "find_distance",
+        "description": "Find distance between two cities",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "origin": {
+              "type": "string",
+              "description": "Starting city"
+            },
+            "destination": {
+              "type": "string",
+              "description": "Destination city"
+            }
+          },
+          "required": ["origin", "destination"]
+        }
+      },
+      {
+        "name": "get_fare",
+        "description": "find fare to travel between two places based on kms",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "num": {
+              "type": "integer",
+              "description": "Distance in kilometers"
+            }
+          },
+          "required": ["num"]
+        }
+      }
+    ]
   }
 
 @app.post('/mcp')
